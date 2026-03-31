@@ -1,0 +1,86 @@
+package com.example.scvapi.api.controller;
+
+import com.example.scvapi.api.dto.ConcedenteDTO;
+
+import com.example.scvapi.exception.RegraNegocioException;
+import com.example.scvapi.model.entity.Concedente;
+import com.example.scvapi.service.ConcedenteService;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/v1/concedentes")
+@RequiredArgsConstructor
+@CrossOrigin
+public class ConcedenteController {
+
+    private final ConcedenteService service;
+
+    @GetMapping()
+    public ResponseEntity get() {
+        List<Concedente> concedentes = service.getConcedentes();
+        return ResponseEntity.ok(concedentes.stream().map(ConcedenteDTO::create).collect(Collectors.toList()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity get(@PathVariable("id") Long id) {
+        Optional<Concedente> concedente = service.getConcedenteById(id);
+        if (!concedente.isPresent()) {
+            return new ResponseEntity("Concedente não encontrada", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(concedente.map(ConcedenteDTO::create));
+    }
+
+    @PostMapping()
+    public ResponseEntity post(@RequestBody ConcedenteDTO dto) {
+        try {
+            Concedente concedente = converter(dto);
+            concedente = service.salvar(concedente);
+            return new ResponseEntity(concedente, HttpStatus.CREATED);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ConcedenteDTO dto) {
+        if (!service.getConcedenteById(id).isPresent()) {
+            return new ResponseEntity("Concedente não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Concedente concedente = converter(dto);
+            concedente.setId(id);
+            service.salvar(concedente);
+            return ResponseEntity.ok(concedente);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Concedente> concedente = service.getConcedenteById(id);
+        if (!concedente.isPresent()) {
+            return new ResponseEntity("Concedente não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(concedente.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    public Concedente converter(ConcedenteDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Concedente concedente = modelMapper.map(dto, Concedente.class);
+        return concedente;
+    }
+}
