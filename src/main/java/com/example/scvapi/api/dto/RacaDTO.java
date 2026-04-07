@@ -1,8 +1,10 @@
 package com.example.scvapi.api.dto;
 
+import com.example.scvapi.model.entity.Raca;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 @Data
 @NoArgsConstructor
@@ -11,6 +13,16 @@ public class RacaDTO {
 
     private Long id;
     private String nome;
+
     private Long especieId;
     private String especieNome;
+
+    public static RacaDTO create(Raca raca) {
+        ModelMapper modelMapper = new ModelMapper();
+        RacaDTO dto = modelMapper.map(raca, RacaDTO.class);
+
+        dto.setEspecieNome(raca.getEspecie().getNome());
+
+        return dto;
+    }
 }

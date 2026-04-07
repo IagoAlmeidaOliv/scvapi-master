@@ -14,5 +14,4 @@ public abstract class PessoaDTO {
     private String cpf;
     private String email;
     private String celular;
-
 }
