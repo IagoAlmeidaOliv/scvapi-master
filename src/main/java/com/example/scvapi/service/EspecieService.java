@@ -1,0 +1,29 @@
+package com.example.scvapi.service;
+
+import com.example.scvapi.exception.RegraNegocioException;
+import com.example.scvapi.model.entity.Especie;
+import com.example.scvapi.model.repository.EspecieRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+@Service
+public class EspecieService {
+
+    private EspecieRepository repository;
+
+    public EspecieService(EspecieRepository repository) {
+        this.repository = repository;
+    }
+
+    public List<Especie> getEspecies() {
+        return repository.findAll();
+    }
+
+    public Optional<Especie> getEspecieById(Long id) {
+        return repository.findById(id);
+    }
+}
