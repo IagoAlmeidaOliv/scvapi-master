@@ -26,4 +26,22 @@ public class EspecieService {
     public Optional<Especie> getEspecieById(Long id) {
         return repository.findById(id);
     }
+
+    @Transactional
+    public Especie salvar(Especie especie) {
+        validar(especie);
+        return repository.save(especie);
+    }
+
+    @Transactional
+    public void excluir(Especie especie) {
+        Objects.requireNonNull(especie.getId());
+        repository.delete(especie);
+    }
+
+    public void validar(Especie especie) {
+        if (especie.getNome() == null || especie.getNome().trim().equals("")) {
+            throw new RegraNegocioException("Nome inválido");
+        }
+    }
 }
