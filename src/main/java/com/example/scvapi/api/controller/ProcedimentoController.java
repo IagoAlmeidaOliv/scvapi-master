@@ -1,8 +1,10 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.ProcedimentoDTO;
+import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Procedimento;
 import com.example.scvapi.service.ProcedimentoService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,29 +15,42 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/procedimentos")
+@RequestMapping("/api/v1/procedimentos")
+@RequiredArgsConstructor
+@CrossOrigin
 public class ProcedimentoController {
 
     private final ProcedimentoService service;
 
-    public ProcedimentoController(ProcedimentoService service) {
-        this.service = service;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ProcedimentoDTO>> get() {
+    @GetMapping()
+    public ResponseEntity get() {
         List<Procedimento> procedimentos = service.getProcedimentos();
-        List<ProcedimentoDTO> dtos = procedimentos.stream()
-                .map(ProcedimentoDTO::create)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(procedimentos.stream().map(ProcedimentoDTO::create).collect(Collectors.toList()));
     }
 
-    @PostMapping
+    @GetMapping("/{id}")
+    public ResponseEntity get(@PathVariable("id") Long id) {
+        Optional<Procedimento> procedimento = service.getProcedimentoById(id);
+        if (!procedimento.isPresent()) {
+            return new ResponseEntity("Procedimento não encontrado", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(procedimento.map(ProcedimentoDTO::create));
+    }
+
+    @PostMapping()
     public ResponseEntity post(@RequestBody ProcedimentoDTO dto) {
+        try {
+            Procedimento procedimento = converter(dto);
+            procedimento = service.salvar(procedimento);
+            return new ResponseEntity(procedimento, HttpStatus.CREATED);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    public Procedimento converter(ProcedimentoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Procedimento procedimento = modelMapper.map(dto, Procedimento.class);
-        Procedimento procedimentoSalvo = service.salvar(procedimento);
-        return new ResponseEntity(ProcedimentoDTO.create(procedimentoSalvo), HttpStatus.CREATED);
+        return procedimento;
     }
 }

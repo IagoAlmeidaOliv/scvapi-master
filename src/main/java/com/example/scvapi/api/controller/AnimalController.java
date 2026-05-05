@@ -1,8 +1,10 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.AnimalDTO;
+import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Animal;
 import com.example.scvapi.service.AnimalService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,56 +15,42 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/animais")
+@RequestMapping("/api/v1/animais")
+@RequiredArgsConstructor
+@CrossOrigin
 public class AnimalController {
 
     private final AnimalService service;
 
-    public AnimalController(AnimalService service) {
-        this.service = service;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<AnimalDTO>> getAnimais() {
+    @GetMapping()
+    public ResponseEntity get() {
         List<Animal> animais = service.getAnimais();
-
-        List<AnimalDTO> dtos = animais.stream()
-                .map(AnimalDTO::create)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(animais.stream().map(AnimalDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AnimalDTO> getAnimalById(@PathVariable Long id) {
-        Optional<Animal> animalOpt = service.getAnimalById(id);
-
-        if (animalOpt.isPresent()) {
-            AnimalDTO dto = AnimalDTO.create(animalOpt.get());
-            return ResponseEntity.ok(dto);
+    public ResponseEntity get(@PathVariable("id") Long id) {
+        Optional<Animal> animal = service.getAnimalById(id);
+        if (!animal.isPresent()) {
+            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(animal.map(AnimalDTO::create));
     }
 
-    @PostMapping
-    public ResponseEntity<AnimalDTO> salvar(@RequestBody AnimalDTO dto) {
+    @PostMapping()
+    public ResponseEntity post(@RequestBody AnimalDTO dto) {
+        try {
+            Animal animal = converter(dto);
+            animal = service.salvar(animal);
+            return new ResponseEntity(animal, HttpStatus.CREATED);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    public Animal converter(AnimalDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Animal animal = modelMapper.map(dto, Animal.class);
-
-        Animal animalSalvo = service.salvar(animal);
-
-        return new ResponseEntity<>(AnimalDTO.create(animalSalvo), HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        Optional<Animal> animalOpt = service.getAnimalById(id);
-
-        if (animalOpt.isPresent()) {
-            service.excluir(animalOpt.get());
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        return animal;
     }
 }

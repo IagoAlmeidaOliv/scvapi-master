@@ -1,8 +1,10 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.EspecieDTO;
+import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Especie;
 import com.example.scvapi.service.EspecieService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +15,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/especies")
+@RequestMapping("/api/v1/especies")
+@RequiredArgsConstructor
+@CrossOrigin
 public class EspecieController {
 
     private final EspecieService service;
 
-    public EspecieController(EspecieService service) {
-        this.service = service;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<EspecieDTO>> get() {
+    @GetMapping()
+    public ResponseEntity get() {
         List<Especie> especies = service.getEspecies();
-        List<EspecieDTO> dtos = especies.stream()
-                .map(EspecieDTO::create)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(especies.stream().map(EspecieDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
@@ -40,21 +37,20 @@ public class EspecieController {
         return ResponseEntity.ok(especie.map(EspecieDTO::create));
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity post(@RequestBody EspecieDTO dto) {
-        ModelMapper modelMapper = new ModelMapper();
-        Especie especie = modelMapper.map(dto, Especie.class);
-        Especie especieSalva = service.salvar(especie);
-        return new ResponseEntity(EspecieDTO.create(especieSalva), HttpStatus.CREATED);
+        try {
+            Especie especie = converter(dto);
+            especie = service.salvar(especie);
+            return new ResponseEntity(especie, HttpStatus.CREATED);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
-        Optional<Especie> especie = service.getEspecieById(id);
-        if (!especie.isPresent()) {
-            return new ResponseEntity("Espécie não encontrada", HttpStatus.NOT_FOUND);
-        }
-        service.excluir(especie.get());
-        return ResponseEntity.noContent().build();
+    public Especie converter(EspecieDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Especie especie = modelMapper.map(dto, Especie.class);
+        return especie;
     }
 }

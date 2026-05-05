@@ -1,8 +1,10 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.ConsultaDTO;
+import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Consulta;
 import com.example.scvapi.service.ConsultaService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +15,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/consultas")
+@RequestMapping("/api/v1/consultas")
+@RequiredArgsConstructor
+@CrossOrigin
 public class ConsultaController {
 
     private final ConsultaService service;
 
-    public ConsultaController(ConsultaService service) {
-        this.service = service;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ConsultaDTO>> get() {
+    @GetMapping()
+    public ResponseEntity get() {
         List<Consulta> consultas = service.getConsultas();
-        List<ConsultaDTO> dtos = consultas.stream()
-                .map(ConsultaDTO::create)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(consultas.stream().map(ConsultaDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
@@ -40,21 +37,20 @@ public class ConsultaController {
         return ResponseEntity.ok(consulta.map(ConsultaDTO::create));
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity post(@RequestBody ConsultaDTO dto) {
-        ModelMapper modelMapper = new ModelMapper();
-        Consulta consulta = modelMapper.map(dto, Consulta.class);
-        Consulta consultaSalva = service.salvar(consulta);
-        return new ResponseEntity(ConsultaDTO.create(consultaSalva), HttpStatus.CREATED);
+        try {
+            Consulta consulta = converter(dto);
+            consulta = service.salvar(consulta);
+            return new ResponseEntity(consulta, HttpStatus.CREATED);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id) {
-        Optional<Consulta> consulta = service.getConsultaById(id);
-        if (!consulta.isPresent()) {
-            return new ResponseEntity("Consulta não encontrada", HttpStatus.NOT_FOUND);
-        }
-        service.excluir(consulta.get());
-        return ResponseEntity.noContent().build();
+    public Consulta converter(ConsultaDTO dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Consulta consulta = modelMapper.map(dto, Consulta.class);
+        return consulta;
     }
 }
