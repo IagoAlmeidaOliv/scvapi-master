@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @CrossOrigin
 public class AnimalController {
-
     private final AnimalService service;
 
     @GetMapping()
