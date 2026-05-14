@@ -18,12 +18,11 @@ public class ConsultaDTO {
     private Date dataConsulta;
     private String horaConsulta;
     private String observacoes;
+    private Long idVeterinario;
+    private String nomeVeterinario;
 
-    private Long veterinarioId;
-    private String veterinarioNome;
-
-    private Long animalId;
-    private String animalNome;
+    private Long idAnimal;
+    private String nomeAnimal;
 
     private List<ProcedimentoDTO> procedimentos;
 
@@ -31,8 +30,14 @@ public class ConsultaDTO {
         ModelMapper modelMapper = new ModelMapper();
         ConsultaDTO dto = modelMapper.map(consulta, ConsultaDTO.class);
 
-        dto.setVeterinarioNome(consulta.getVeterinario().getNome());
-        dto.setAnimalNome(consulta.getAnimal().getNome());
+
+        if (consulta.getVeterinario() != null) {
+            dto.setNomeVeterinario(consulta.getVeterinario().getNome());
+        }
+
+        if (consulta.getAnimal() != null) {
+            dto.setNomeAnimal(consulta.getAnimal().getNome());
+        }
 
         return dto;
     }

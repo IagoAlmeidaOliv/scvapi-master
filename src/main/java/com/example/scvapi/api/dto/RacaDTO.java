@@ -14,14 +14,16 @@ public class RacaDTO {
     private Long id;
     private String nome;
 
-    private Long especieId;
-    private String especieNome;
+    private Long idEspecie;
+    private String nomeEspecie;
 
     public static RacaDTO create(Raca raca) {
         ModelMapper modelMapper = new ModelMapper();
         RacaDTO dto = modelMapper.map(raca, RacaDTO.class);
 
-        dto.setEspecieNome(raca.getEspecie().getNome());
+        if (raca.getEspecie() != null) {
+            dto.setNomeEspecie(raca.getEspecie().getNome());
+        }
 
         return dto;
     }

@@ -48,9 +48,23 @@ public class VeterinarioController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody VeterinarioDTO dto) {
+        if (!service.getVeterinarioById(id).isPresent()) {
+            return new ResponseEntity("Veterinário não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Veterinario veterinario = converter(dto);
+            veterinario.setId(id);
+            service.salvar(veterinario);
+            return ResponseEntity.ok(veterinario);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Veterinario converter(VeterinarioDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
-        Veterinario veterinario = modelMapper.map(dto, Veterinario.class);
-        return veterinario;
+        return modelMapper.map(dto, Veterinario.class);
     }
 }

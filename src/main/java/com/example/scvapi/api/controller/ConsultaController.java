@@ -2,8 +2,12 @@ package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.ConsultaDTO;
 import com.example.scvapi.exception.RegraNegocioException;
+import com.example.scvapi.model.entity.Animal;
 import com.example.scvapi.model.entity.Consulta;
+import com.example.scvapi.model.entity.Veterinario;
+import com.example.scvapi.service.AnimalService;
 import com.example.scvapi.service.ConsultaService;
+import com.example.scvapi.service.VeterinarioService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -21,6 +25,8 @@ import java.util.stream.Collectors;
 public class ConsultaController {
 
     private final ConsultaService service;
+    private final AnimalService animalService;
+    private final VeterinarioService veterinarioService;
 
     @GetMapping()
     public ResponseEntity get() {
@@ -48,9 +54,43 @@ public class ConsultaController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ConsultaDTO dto) {
+        if (!service.getConsultaById(id).isPresent()) {
+            return new ResponseEntity("Consulta não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Consulta consulta = converter(dto);
+            consulta.setId(id);
+            service.salvar(consulta);
+            return ResponseEntity.ok(consulta);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Consulta converter(ConsultaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Consulta consulta = modelMapper.map(dto, Consulta.class);
+
+        if (dto.getIdAnimal() != null) {
+            Optional<Animal> animal = animalService.getAnimalById(dto.getIdAnimal());
+            if (!animal.isPresent()) {
+                consulta.setAnimal(null);
+            } else {
+                consulta.setAnimal(animal.get());
+            }
+        }
+
+        if (dto.getIdVeterinario() != null) {
+            Optional<Veterinario> veterinario = veterinarioService.getVeterinarioById(dto.getIdVeterinario());
+            if (!veterinario.isPresent()) {
+                consulta.setVeterinario(null);
+            } else {
+                consulta.setVeterinario(veterinario.get());
+            }
+        }
+
         return consulta;
     }
 }

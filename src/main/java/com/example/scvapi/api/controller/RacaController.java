@@ -2,7 +2,9 @@ package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.RacaDTO;
 import com.example.scvapi.exception.RegraNegocioException;
+import com.example.scvapi.model.entity.Especie;
 import com.example.scvapi.model.entity.Raca;
+import com.example.scvapi.service.EspecieService;
 import com.example.scvapi.service.RacaService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class RacaController {
 
     private final RacaService service;
+    private final EspecieService especieService;
 
     @GetMapping()
     public ResponseEntity get() {
@@ -48,9 +51,33 @@ public class RacaController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody RacaDTO dto) {
+        if (!service.getRacaById(id).isPresent()) {
+            return new ResponseEntity("Raça não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Raca raca = converter(dto);
+            raca.setId(id);
+            service.salvar(raca);
+            return ResponseEntity.ok(raca);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Raca converter(RacaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Raca raca = modelMapper.map(dto, Raca.class);
+
+        if (dto.getIdEspecie() != null) {
+            Optional<Especie> especie = especieService.getEspecieById(dto.getIdEspecie());
+            if (!especie.isPresent()) {
+                raca.setEspecie(null);
+            } else {
+                raca.setEspecie(especie.get());
+            }
+        }
         return raca;
     }
 }

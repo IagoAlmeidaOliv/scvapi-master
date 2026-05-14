@@ -48,9 +48,23 @@ public class TutorController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody TutorDTO dto) {
+        if (!service.getTutorById(id).isPresent()) {
+            return new ResponseEntity("Tutor não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Tutor tutor = converter(dto);
+            tutor.setId(id);
+            service.salvar(tutor);
+            return ResponseEntity.ok(tutor);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Tutor converter(TutorDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
-        Tutor tutor = modelMapper.map(dto, Tutor.class);
-        return tutor;
+        return modelMapper.map(dto, Tutor.class);
     }
 }

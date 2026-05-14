@@ -48,9 +48,23 @@ public class ProcedimentoController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody ProcedimentoDTO dto) {
+        if (!service.getProcedimentoById(id).isPresent()) {
+            return new ResponseEntity("Procedimento não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Procedimento procedimento = converter(dto);
+            procedimento.setId(id);
+            service.salvar(procedimento);
+            return ResponseEntity.ok(procedimento);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Procedimento converter(ProcedimentoDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
-        Procedimento procedimento = modelMapper.map(dto, Procedimento.class);
-        return procedimento;
+        return modelMapper.map(dto, Procedimento.class);
     }
 }

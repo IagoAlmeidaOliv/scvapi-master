@@ -3,7 +3,11 @@ package com.example.scvapi.api.controller;
 import com.example.scvapi.api.dto.AnimalDTO;
 import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Animal;
+import com.example.scvapi.model.entity.Raca;
+import com.example.scvapi.model.entity.Tutor;
 import com.example.scvapi.service.AnimalService;
+import com.example.scvapi.service.RacaService;
+import com.example.scvapi.service.TutorService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -20,6 +24,8 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class AnimalController {
     private final AnimalService service;
+    private final TutorService tutorService;
+    private final RacaService racaService;
 
     @GetMapping()
     public ResponseEntity get() {
@@ -47,9 +53,43 @@ public class AnimalController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody AnimalDTO dto) {
+        if (!service.getAnimalById(id).isPresent()) {
+            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            Animal animal = converter(dto);
+            animal.setId(id);
+            service.salvar(animal);
+            return ResponseEntity.ok(animal);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Animal converter(AnimalDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Animal animal = modelMapper.map(dto, Animal.class);
+
+        if (dto.getIdTutor() != null) {
+            Optional<Tutor> tutor = tutorService.getTutorById(dto.getIdTutor());
+            if (!tutor.isPresent()) {
+                animal.setTutor(null);
+            } else {
+                animal.setTutor(tutor.get());
+            }
+        }
+
+        if (dto.getIdRaca() != null) {
+            Optional<Raca> raca = racaService.getRacaById(dto.getIdRaca());
+            if (!raca.isPresent()) {
+                animal.setRaca(null);
+            } else {
+                animal.setRaca(raca.get());
+            }
+        }
+
         return animal;
     }
 }

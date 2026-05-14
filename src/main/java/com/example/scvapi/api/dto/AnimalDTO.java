@@ -36,4 +36,12 @@ public class AnimalDTO {
 
         return dto;
     }
+
+    public Long getIdRaca() {
+        return racaId;
+    }
+
+    public Long getIdTutor() {
+        return tutorId;
+    }
 }
