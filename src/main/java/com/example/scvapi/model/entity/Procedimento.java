@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,4 +19,7 @@ public class Procedimento {
 
     private String nome;
     private Double valor;
+
+    @ManyToMany
+    private List<Consulta> consultas;
 }

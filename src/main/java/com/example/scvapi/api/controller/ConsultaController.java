@@ -1,9 +1,11 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.ConsultaDTO;
+import com.example.scvapi.api.dto.ProcedimentoDTO;
 import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Animal;
 import com.example.scvapi.model.entity.Consulta;
+import com.example.scvapi.model.entity.Procedimento;
 import com.example.scvapi.model.entity.Veterinario;
 import com.example.scvapi.service.AnimalService;
 import com.example.scvapi.service.ConsultaService;
@@ -69,6 +71,20 @@ public class ConsultaController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Consulta> consulta = service.getConsultaById(id);
+        if (!consulta.isPresent()) {
+            return new ResponseEntity("Consulta não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(consulta.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Consulta converter(ConsultaDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Consulta consulta = modelMapper.map(dto, Consulta.class);
@@ -92,5 +108,15 @@ public class ConsultaController {
         }
 
         return consulta;
+    }
+
+    @GetMapping("/{id}/procedimentos")
+    public ResponseEntity getProcedimentos(@PathVariable("id") Long id) {
+        Optional<Consulta> consulta = service.getConsultaById(id);
+        if (!consulta.isPresent()) {
+            return new ResponseEntity("Consulta não encontrado", HttpStatus.NOT_FOUND);
+        }
+        List<Procedimento> procedimentos = consulta.get().getProcedimentos();
+        return ResponseEntity.ok(procedimentos.stream().map(ProcedimentoDTO::create).collect(Collectors.toList()));
     }
 }

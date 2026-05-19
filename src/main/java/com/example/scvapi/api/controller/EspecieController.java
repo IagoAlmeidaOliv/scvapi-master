@@ -1,8 +1,10 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.EspecieDTO;
+import com.example.scvapi.api.dto.RacaDTO;
 import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Especie;
+import com.example.scvapi.model.entity.Raca;
 import com.example.scvapi.service.EspecieService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -63,8 +65,32 @@ public class EspecieController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Especie> especie = service.getEspecieById(id);
+        if (!especie.isPresent()) {
+            return new ResponseEntity("Especie não encontrada", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(especie.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Especie converter(EspecieDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(dto, Especie.class);
+    }
+
+    @GetMapping("/{id}/racas")
+    public ResponseEntity getRacas(@PathVariable("id") Long id) {
+        Optional<Especie> especie = service.getEspecieById(id);
+        if (!especie.isPresent()) {
+            return new ResponseEntity("Especie não encontrada", HttpStatus.NOT_FOUND);
+        }
+        List<Raca> racas = especie.get().getRacas();
+        return ResponseEntity.ok(racas.stream().map(RacaDTO::create).collect(Collectors.toList()));
     }
 }

@@ -23,18 +23,11 @@ public class Consulta {
     private String observacoes;
 
     @ManyToOne
-    @JoinColumn(name = "veterinario_id")
     private Veterinario veterinario;
 
     @ManyToOne
-    @JoinColumn(name = "animal_id")
     private Animal animal;
 
     @ManyToMany
-    @JoinTable(
-            name = "consulta_procedimento",
-            joinColumns = @JoinColumn(name = "consulta_id"),
-            inverseJoinColumns = @JoinColumn(name = "procedimento_id")
-    )
     private List<Procedimento> procedimentos;
 }

@@ -3,6 +3,7 @@ package com.example.scvapi.api.controller;
 import com.example.scvapi.api.dto.ProcedimentoDTO;
 import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Procedimento;
+import com.example.scvapi.model.entity.Veterinario;
 import com.example.scvapi.service.ProcedimentoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -58,6 +59,20 @@ public class ProcedimentoController {
             procedimento.setId(id);
             service.salvar(procedimento);
             return ResponseEntity.ok(procedimento);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Procedimento> procedimento = service.getProcedimentoById(id);
+        if (!procedimento.isPresent()) {
+            return new ResponseEntity("Procedimento não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(procedimento.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         } catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

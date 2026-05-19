@@ -1,8 +1,10 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.AnimalDTO;
+import com.example.scvapi.api.dto.ConsultaDTO;
 import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Animal;
+import com.example.scvapi.model.entity.Consulta;
 import com.example.scvapi.model.entity.Raca;
 import com.example.scvapi.model.entity.Tutor;
 import com.example.scvapi.service.AnimalService;
@@ -68,6 +70,20 @@ public class AnimalController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Animal> animal = service.getAnimalById(id);
+        if (!animal.isPresent()) {
+            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(animal.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Animal converter(AnimalDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         Animal animal = modelMapper.map(dto, Animal.class);
@@ -91,5 +107,15 @@ public class AnimalController {
         }
 
         return animal;
+    }
+
+    @GetMapping("/{id}/consultas")
+    public ResponseEntity getConsultas(@PathVariable("id") Long id) {
+        Optional<Animal> animal = service.getAnimalById(id);
+        if (!animal.isPresent()) {
+            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
+        }
+        List<Consulta> consultas = animal.get().getConsultas();
+        return ResponseEntity.ok(consultas.stream().map(ConsultaDTO::create).collect(Collectors.toList()));
     }
 }

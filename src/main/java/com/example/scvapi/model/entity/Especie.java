@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,4 +18,7 @@ public class Especie {
     private Long id;
 
     private String nome;
+
+    @OneToMany(mappedBy = "especie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Raca> racas;
 }

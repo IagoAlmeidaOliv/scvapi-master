@@ -20,7 +20,6 @@ public class ConsultaDTO {
     private String observacoes;
     private Long idVeterinario;
     private String nomeVeterinario;
-
     private Long idAnimal;
     private String nomeAnimal;
 

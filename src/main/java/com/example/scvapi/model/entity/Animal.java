@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,10 +30,11 @@ public class Animal {
     private byte[] foto;
 
     @ManyToOne
-    @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
     @ManyToOne
-    @JoinColumn(name = "raca_id")
     private Raca raca;
+
+    @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consulta> consultas;
 }

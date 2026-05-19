@@ -1,7 +1,9 @@
 package com.example.scvapi.api.controller;
 
 import com.example.scvapi.api.dto.VeterinarioDTO;
+import com.example.scvapi.api.dto.ConsultaDTO;
 import com.example.scvapi.exception.RegraNegocioException;
+import com.example.scvapi.model.entity.Consulta;
 import com.example.scvapi.model.entity.Veterinario;
 import com.example.scvapi.service.VeterinarioService;
 import lombok.RequiredArgsConstructor;
@@ -63,8 +65,32 @@ public class VeterinarioController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Veterinario> veterinario = service.getVeterinarioById(id);
+        if (!veterinario.isPresent()) {
+            return new ResponseEntity("Veterinário não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(veterinario.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Veterinario converter(VeterinarioDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(dto, Veterinario.class);
+    }
+
+    @GetMapping("/{id}/consultas")
+    public ResponseEntity getConsultas(@PathVariable("id") Long id) {
+        Optional<Veterinario> veterinario = service.getVeterinarioById(id);
+        if (!veterinario.isPresent()) {
+            return new ResponseEntity("Veterinário não encontrado", HttpStatus.NOT_FOUND);
+        }
+        List<Consulta> consultas = veterinario.get().getConsultas();
+        return ResponseEntity.ok(consultas.stream().map(ConsultaDTO::create).collect(Collectors.toList()));
     }
 }

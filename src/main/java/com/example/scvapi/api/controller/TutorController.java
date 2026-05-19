@@ -1,7 +1,9 @@
 package com.example.scvapi.api.controller;
 
+import com.example.scvapi.api.dto.AnimalDTO;
 import com.example.scvapi.api.dto.TutorDTO;
 import com.example.scvapi.exception.RegraNegocioException;
+import com.example.scvapi.model.entity.Animal;
 import com.example.scvapi.model.entity.Tutor;
 import com.example.scvapi.service.TutorService;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +50,7 @@ public class TutorController {
         }
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody TutorDTO dto) {
         if (!service.getTutorById(id).isPresent()) {
             return new ResponseEntity("Tutor não encontrado", HttpStatus.NOT_FOUND);
@@ -63,8 +65,32 @@ public class TutorController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity excluir(@PathVariable("id") Long id) {
+        Optional<Tutor> tutor = service.getTutorById(id);
+        if (!tutor.isPresent()) {
+            return new ResponseEntity("Tutor não encontrado", HttpStatus.NOT_FOUND);
+        }
+        try {
+            service.excluir(tutor.get());
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } catch (RegraNegocioException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     public Tutor converter(TutorDTO dto) {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(dto, Tutor.class);
+    }
+
+    @GetMapping("/{id}/animais")
+    public ResponseEntity getAnimais(@PathVariable("id") Long id) {
+        Optional<Tutor> tutor = service.getTutorById(id);
+        if (!tutor.isPresent()) {
+            return new ResponseEntity("Tutor não encontrado", HttpStatus.NOT_FOUND);
+        }
+        List<Animal> animais = tutor.get().getAnimais();
+        return ResponseEntity.ok(animais.stream().map(AnimalDTO::create).collect(Collectors.toList()));
     }
 }

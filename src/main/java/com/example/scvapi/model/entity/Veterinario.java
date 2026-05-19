@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -13,4 +14,7 @@ import javax.persistence.*;
 public class Veterinario extends Pessoa {
 
     private String crmv;
+
+    @OneToMany(mappedBy = "veterinario")
+    private List<Consulta> consultas;
 }
