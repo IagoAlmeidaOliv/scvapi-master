@@ -1,0 +1,1032 @@
+{
+  "info": {
+    "_postman_id": "1c3937a7-3de5-4847-9d0c-d4eff99d7c1f",
+    "name": "scvapi",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54578514",
+    "_collection_link": "https://go.postman.co/collection/54578514-1c3937a7-3de5-4847-9d0c-d4eff99d7c1f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "animais",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/animais",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "animais"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "animais_ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/animais/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "animais",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "animais",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": " {  \r\n    \"nome\": \"Harry\", \r\n    \"dataNascimento\": \"2022-01-02\", \r\n    \"sexo\": \"M\", \r\n    \"castrado\": \"S\", \r\n    \"observacoes\":\"sem observações\",\r\n    \"idTutor\": 2,\r\n    \"idRaca\": 2\r\n }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/animais",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "animais"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "animais put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "    {\r\n        \"id\": 3,\r\n        \"nome\": \"Harry\",\r\n        \"dataNascimento\": \"2022-01-02T00:00:00.000+00:00\",\r\n        \"sexo\": \"M\",\r\n        \"castrado\": \"S\",\r\n        \"observacoes\": \"sem observações\",\r\n        \"foto\": null,\r\n        \"idTutor\": 2,\r\n        \"idRaca\": 2,\r\n        \"consultas\": []\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/animais/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "animais",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "animais delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/animais/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "animais",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "tutores",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/tutores",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "tutores"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "tutores_ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/tutores/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "tutores",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "tutores",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"João\",\r\n  \"cpf\": \"11122233344\",\r\n  \"email\": \"iago@gmail.com\",\r\n  \"celular\": \"11223455678\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/tutores",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "tutores"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "tutores put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \"id\": 2,\r\n        \"nome\": \"João\",\r\n        \"cpf\": \"11122233344\",\r\n        \"email\": \"joão@gmail.com\",\r\n        \"celular\": \"11223455678\",\r\n        \"animais\": [\r\n            {\r\n                \"id\": 2,\r\n                \"nome\": \"Harry\",\r\n                \"dataNascimento\": \"2022-01-02T00:00:00.000+00:00\",\r\n                \"sexo\": \"M\",\r\n                \"castrado\": \"S\",\r\n                \"observacoes\": \"sem observações\",\r\n                \"foto\": null,\r\n                \"idTutor\": 2,\r\n                \"idRaca\": 2\r\n            }\r\n        ]\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/tutores/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "tutores",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "tutores delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/tutores/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "tutores",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "racas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/racas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "racas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "racas_ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/racas/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "racas",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "racas",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"bluebluebleu\",\r\n    \"idEspecie\": 6\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/racas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "racas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "racas put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"betta\",\r\n    \"idEspecie\": 6\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/racas/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "racas",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "racas delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"betta\",\r\n    \"idEspecie\": 6\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/racas/10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "racas",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "especies",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"felina\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/especies",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "especies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "especies_ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/especies/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "especies",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "especie_ID/racas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/especies/2/racas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "especies",
+            "2",
+            "racas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "especies",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nome\": \"peixe\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/especies",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "especies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "especies put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 3,\r\n    \"nome\": \"cachorros\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/especies/5",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "especies",
+            "5"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "especies delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 1,\r\n    \"nome\": \"peixe\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/especies/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "especies",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "procedimentos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/procedimentos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "procedimentos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "procedimentos_ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/procedimentos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "procedimentos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "procedimentos",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": " {  \r\n    \"nome\": \"Banho\", \r\n    \"valor\": 30\r\n }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/procedimentos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "procedimentos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "procedimentos put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "    {\r\n        \"id\": 2,\r\n        \"nome\": \"Tosa\",\r\n        \"valor\": 70.0\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/procedimentos/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "procedimentos",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "procedimentos delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/procedimentos/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "procedimentos",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "veterinarios",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/veterinarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "veterinarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "veterinarios_id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/veterinarios/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "veterinarios",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "veterinarios_ID/consultas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/veterinarios/1/consultas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "veterinarios",
+            "1",
+            "consultas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "veterinários",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "    {\r\n        \"nome\": \"Marcia\",\r\n        \"cpf\": \"11122233344\",\r\n        \"email\": \"Marcia@gmail.com\",\r\n        \"celular\": \"11223455678\",\r\n        \"crmv\": \"6786321315\"\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/veterinarios",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "veterinarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "veterinários",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 2,\r\n    \"nome\": \"Antonio\",\r\n    \"cpf\": \"11122233344\",\r\n    \"email\": \"antonio@gmail.com\",\r\n    \"celular\": \"11223455678\",\r\n    \"crmv\": \"777777\",\r\n    \"consultas\":[]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/veterinarios/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "veterinarios",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "veterinários delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/veterinarios/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "veterinarios",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "consultas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/consultas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "consultas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "consultas_id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/consultas/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "consultas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "consulta_id/procedimentos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/api/v1/consultas/1/procedimentos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "consultas",
+            "1",
+            "procedimentos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "consultas",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"dataConsulta\":\"2026-01-06\",\r\n    \"horaConsulta\":\"14hrs\",\r\n    \"observacoes\":\"nenhuma\",\r\n    \"procedimentos\":[\r\n        {\"id\": 1}\r\n    ],\r\n    \"idVeterinario\": 1,\r\n    \"idAnimal\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/consultas",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "consultas"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "consultas put",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"id\": 1,\r\n    \"dataConsulta\": \"2026-01-06T00:00:00.000+00:00\",\r\n    \"horaConsulta\": \"18hrs\",\r\n    \"observacoes\": \"nenhuma\",\r\n    \"idVeterinario\": 1,\r\n    \"idAnimal\": 2,\r\n    \"procedimentos\": [\r\n        {\r\n            \"id\": 1,\r\n            \"nome\": \"Banho\",\r\n            \"valor\": 30.0\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"nome\": \"Tosa\",\r\n            \"valor\": 70.0\r\n        }\r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/consultas/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "consultas",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "consultas delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/api/v1/consultas/3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "api",
+            "v1",
+            "consultas",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
