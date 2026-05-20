@@ -3,7 +3,6 @@ package com.example.scvapi.api.controller;
 import com.example.scvapi.api.dto.ProcedimentoDTO;
 import com.example.scvapi.exception.RegraNegocioException;
 import com.example.scvapi.model.entity.Procedimento;
-import com.example.scvapi.model.entity.Veterinario;
 import com.example.scvapi.service.ProcedimentoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

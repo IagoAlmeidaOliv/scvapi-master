@@ -29,5 +29,10 @@ public class Consulta {
     private Animal animal;
 
     @ManyToMany
+    @JoinTable(
+            name = "ProcedimentosConsultas",
+            joinColumns = @JoinColumn(name="idConsulta"),
+            inverseJoinColumns = @JoinColumn(name="idProcedimento")
+    )
     private List<Procedimento> procedimentos;
 }

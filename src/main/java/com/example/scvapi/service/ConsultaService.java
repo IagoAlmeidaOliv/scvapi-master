@@ -44,6 +44,7 @@ public class ConsultaService {
             throw new RegraNegocioException("Data da consulta inválida");
         }
         if (consulta.getAnimal() == null || consulta.getAnimal().getId() == null) {
+            System.out.println(consulta.getAnimal());
             throw new RegraNegocioException("Animal inválido");
         }
         if (consulta.getVeterinario() == null || consulta.getVeterinario().getId() == null) {
