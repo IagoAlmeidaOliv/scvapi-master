@@ -20,7 +20,7 @@ public class AnimalDTO {
     private Date dataNascimento;
     private char sexo;
     private char castrado;
-    private String observacoes;
+    private String observações;
     private byte[] foto;
     private Long idTutor;
     private Long idRaca;

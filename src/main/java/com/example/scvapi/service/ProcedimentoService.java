@@ -43,7 +43,7 @@ public class ProcedimentoService {
         if (procedimento.getNome() == null || procedimento.getNome().trim().equals("")) {
             throw new RegraNegocioException("Nome inválido");
         }
-        if (procedimento.getValor() == null || procedimento.getValor() <= 0) {
+        if (procedimento.getCusto() == null || procedimento.getCusto() <= 0) {
             throw new RegraNegocioException("Valor inválido");
         }
     }

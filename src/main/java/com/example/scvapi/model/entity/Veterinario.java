@@ -15,6 +15,7 @@ import java.util.List;
 public class Veterinario extends Pessoa {
 
     private String crmv;
+    private String senha;
 
     @JsonIgnore
     @OneToMany(mappedBy = "veterinario")

@@ -17,7 +17,8 @@ public class ConsultaDTO {
     private Long id;
     private Date dataConsulta;
     private String horaConsulta;
-    private String observacoes;
+    private String observações;
+    private String status;
     private Long idVeterinario;
     private Long idAnimal;
 

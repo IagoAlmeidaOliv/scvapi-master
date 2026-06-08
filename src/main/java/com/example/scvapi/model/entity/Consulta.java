@@ -20,7 +20,8 @@ public class Consulta {
 
     private Date dataConsulta;
     private String horaConsulta;
-    private String observacoes;
+    private String observações;
+    private String status;
 
     @ManyToOne
     private Veterinario veterinario;

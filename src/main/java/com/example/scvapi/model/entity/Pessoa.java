@@ -19,5 +19,11 @@ public abstract class Pessoa {
     private String nome;
     private String cpf;
     private String email;
-    private String celular;
+    private String telefone;
+    private int cep;
+    private int numero;
+    private String complemento;
+    private String bairro;
+    private String cidade;
+    private String uf;
 }
