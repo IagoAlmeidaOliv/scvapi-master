@@ -10,6 +10,10 @@ import com.example.scvapi.model.entity.Tutor;
 import com.example.scvapi.service.AnimalService;
 import com.example.scvapi.service.RacaService;
 import com.example.scvapi.service.TutorService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/animais")
 @RequiredArgsConstructor
+@Api("API de Animais")
 @CrossOrigin
 public class AnimalController {
     private final AnimalService service;
@@ -30,12 +35,22 @@ public class AnimalController {
     private final RacaService racaService;
 
     @GetMapping()
+    @ApiOperation("Obter todos os animais cadastrados")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Busca realizada com sucesso"),
+            @ApiResponse(code = 404, message = "Erro ao fazer busca")
+    })
     public ResponseEntity get() {
         List<Animal> animais = service.getAnimais();
         return ResponseEntity.ok(animais.stream().map(AnimalDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Obter detalhes de um Animal")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Animal encontrado"),
+            @ApiResponse(code = 404, message = "Animal não encontrado")
+    })
     public ResponseEntity get(@PathVariable("id") Long id) {
         Optional<Animal> animal = service.getAnimalById(id);
         if (!animal.isPresent()) {
@@ -45,6 +60,11 @@ public class AnimalController {
     }
 
     @PostMapping()
+    @ApiOperation("Adiciona animal a base de dados")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Animal adicionado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro ao salvar o animal")
+    })
     public ResponseEntity post(@RequestBody AnimalDTO dto) {
         try {
             Animal animal = converter(dto);
@@ -56,6 +76,12 @@ public class AnimalController {
     }
 
     @PutMapping("{id}")
+    @ApiOperation("Altera detalhes de um animal")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Dados alterados com sucesso"),
+            @ApiResponse(code = 400, message = "Erro ao alterar dados do animal"),
+            @ApiResponse(code = 404, message = "Animal não encontrado")
+    })
     public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody AnimalDTO dto) {
         if (!service.getAnimalById(id).isPresent()) {
             return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
@@ -71,6 +97,11 @@ public class AnimalController {
     }
 
     @DeleteMapping("{id}")
+    @ApiOperation("Exclui um animal do banco de dados")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Animal excluido com sucesso"),
+            @ApiResponse(code = 404, message = "Animal não encontrado")
+    })
     public ResponseEntity excluir(@PathVariable("id") Long id) {
         Optional<Animal> animal = service.getAnimalById(id);
         if (!animal.isPresent()) {
@@ -110,6 +141,11 @@ public class AnimalController {
     }
 
     @GetMapping("/{id}/consultas")
+    @ApiOperation("Obter detalhes de consultas de um animal")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Animal encontrado"),
+            @ApiResponse(code = 404, message = "Animal não encontrado")
+    })
     public ResponseEntity getConsultas(@PathVariable("id") Long id) {
         Optional<Animal> animal = service.getAnimalById(id);
         if (!animal.isPresent()) {

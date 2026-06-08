@@ -1,5 +1,6 @@
 package com.example.scvapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Tutor extends Pessoa {
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tutor")
     private List<Animal> animais;
 }

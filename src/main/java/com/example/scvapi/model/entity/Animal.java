@@ -1,5 +1,6 @@
 package com.example.scvapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Animal {
     @ManyToOne
     private Raca raca;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consulta> consultas;
 }
