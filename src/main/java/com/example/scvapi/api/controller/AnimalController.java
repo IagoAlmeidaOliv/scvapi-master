@@ -42,6 +42,12 @@ public class AnimalController {
         return ResponseEntity.ok(animal.map(AnimalDTO::create));
     }
 
+    @GetMapping("/buscar")
+    public ResponseEntity buscarAnimaisPorNome(@RequestParam("nome") String nome) {
+        List<Animal> animais = service.buscarPorNome(nome);
+        return ResponseEntity.ok(animais.stream().map(AnimalDTO::create).collect(Collectors.toList()));
+    }
+
     @PostMapping()
     public ResponseEntity post(@RequestBody AnimalDTO dto) {
         try {

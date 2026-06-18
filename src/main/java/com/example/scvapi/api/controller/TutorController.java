@@ -67,4 +67,10 @@ public class TutorController {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(dto, Tutor.class);
     }
+
+    @GetMapping("/buscar")
+    public ResponseEntity buscarTutoresPorNome(@RequestParam("nome") String nome) {
+        List<Tutor> tutores = service.buscarPorNome(nome);
+        return ResponseEntity.ok(tutores.stream().map(TutorDTO::create).collect(Collectors.toList()));
+    }
 }

@@ -47,4 +47,8 @@ public class TutorService {
             throw new RegraNegocioException("CPF inválido");
         }
     }
+
+    public List<Tutor> buscarPorNome(String nome) {
+        return repository.findByNomeContainingIgnoreCase(nome);
+    }
 }

@@ -50,4 +50,8 @@ public class AnimalService {
             throw new RegraNegocioException("Raça inválida");
         }
     }
+
+    public List<Animal> buscarPorNome(String nome) {
+        return repository.findByNomeContainingIgnoreCase(nome);
+    }
 }
