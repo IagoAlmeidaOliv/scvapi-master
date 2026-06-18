@@ -1,7 +1,7 @@
 package com.example.scvapi.service;
 
 import com.example.scvapi.exception.RegraNegocioException;
-import com.example.scvapi.model.entity.Veterinario;
+import com.example.scvapi.model.entity.*;
 import com.example.scvapi.model.repository.VeterinarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

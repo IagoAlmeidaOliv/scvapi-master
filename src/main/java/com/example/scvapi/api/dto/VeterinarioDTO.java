@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 public class VeterinarioDTO extends PessoaDTO {
 
     private String crmv;
+    private String senha;
 
     public static VeterinarioDTO create(Veterinario veterinario) {
         ModelMapper modelMapper = new ModelMapper();

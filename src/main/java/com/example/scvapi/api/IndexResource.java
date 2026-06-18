@@ -10,6 +10,6 @@ public class IndexResource {
 
     @GetMapping()
     public String get() {
-        return "SAA API";
+        return "SCV API";
     }
 }

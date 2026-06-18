@@ -1,7 +1,7 @@
 package com.example.scvapi.service;
 
 import com.example.scvapi.exception.RegraNegocioException;
-import com.example.scvapi.model.entity.Consulta;
+import com.example.scvapi.model.entity.*;
 import com.example.scvapi.model.repository.ConsultaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +44,7 @@ public class ConsultaService {
             throw new RegraNegocioException("Data da consulta inválida");
         }
         if (consulta.getAnimal() == null || consulta.getAnimal().getId() == null) {
+            System.out.println(consulta.getAnimal());
             throw new RegraNegocioException("Animal inválido");
         }
         if (consulta.getVeterinario() == null || consulta.getVeterinario().getId() == null) {

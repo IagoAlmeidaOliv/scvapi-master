@@ -17,5 +17,5 @@ public class Procedimento {
     private Long id;
 
     private String nome;
-    private Double valor;
+    private Double custo;
 }

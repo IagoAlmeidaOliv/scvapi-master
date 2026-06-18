@@ -20,21 +20,20 @@ public class Consulta {
 
     private Date dataConsulta;
     private String horaConsulta;
-    private String observacoes;
+    private String observações;
+    private String status;
 
     @ManyToOne
-    @JoinColumn(name = "veterinario_id")
     private Veterinario veterinario;
 
     @ManyToOne
-    @JoinColumn(name = "animal_id")
     private Animal animal;
 
     @ManyToMany
     @JoinTable(
-            name = "consulta_procedimento",
-            joinColumns = @JoinColumn(name = "consulta_id"),
-            inverseJoinColumns = @JoinColumn(name = "procedimento_id")
+            name = "ProcedimentosConsultas",
+            joinColumns = @JoinColumn(name="idConsulta"),
+            inverseJoinColumns = @JoinColumn(name="idProcedimento")
     )
     private List<Procedimento> procedimentos;
 }

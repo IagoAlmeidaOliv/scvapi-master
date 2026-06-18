@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Tutor extends Pessoa {
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tutor")
     private List<Animal> animais;
 }

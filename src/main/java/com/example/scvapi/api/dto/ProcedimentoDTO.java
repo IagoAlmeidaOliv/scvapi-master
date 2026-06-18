@@ -13,7 +13,7 @@ public class ProcedimentoDTO {
 
     private Long id;
     private String nome;
-    private Double valor;
+    private Double custo;
 
     public static ProcedimentoDTO create(Procedimento procedimento) {
         ModelMapper modelMapper = new ModelMapper();

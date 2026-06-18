@@ -1,7 +1,7 @@
 package com.example.scvapi.service;
 
 import com.example.scvapi.exception.RegraNegocioException;
-import com.example.scvapi.model.entity.Procedimento;
+import com.example.scvapi.model.entity.*;
 import com.example.scvapi.model.repository.ProcedimentoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,7 @@ public class ProcedimentoService {
         if (procedimento.getNome() == null || procedimento.getNome().trim().equals("")) {
             throw new RegraNegocioException("Nome inválido");
         }
-        if (procedimento.getValor() == null || procedimento.getValor() <= 0) {
+        if (procedimento.getCusto() == null || procedimento.getCusto() <= 0) {
             throw new RegraNegocioException("Valor inválido");
         }
     }

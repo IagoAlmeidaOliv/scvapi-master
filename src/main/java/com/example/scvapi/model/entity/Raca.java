@@ -19,6 +19,5 @@ public class Raca {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "especie_id")
     private Especie especie;
 }

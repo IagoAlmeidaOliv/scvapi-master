@@ -1,11 +1,13 @@
 package com.example.scvapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,10 +31,12 @@ public class Animal {
     private byte[] foto;
 
     @ManyToOne
-    @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
     @ManyToOne
-    @JoinColumn(name = "raca_id")
     private Raca raca;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consulta> consultas;
 }
