@@ -12,8 +12,6 @@ import com.example.scvapi.service.RacaService;
 import com.example.scvapi.service.TutorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -21,61 +19,46 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/animais")
 @RequiredArgsConstructor
 @Api("API de Animais")
-@CrossOrigin
 public class AnimalController {
+
     private final AnimalService service;
     private final TutorService tutorService;
     private final RacaService racaService;
 
     @GetMapping()
     @ApiOperation("Obter todos os animais cadastrados")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Busca realizada com sucesso"),
-            @ApiResponse(code = 404, message = "Erro ao fazer busca")
-    })
-    public ResponseEntity get() {
+    public ResponseEntity<List<AnimalDTO>> get() {
         List<Animal> animais = service.getAnimais();
         return ResponseEntity.ok(animais.stream().map(AnimalDTO::create).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
     @ApiOperation("Obter detalhes de um Animal")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Animal encontrado"),
-            @ApiResponse(code = 404, message = "Animal não encontrado")
-    })
-    public ResponseEntity get(@PathVariable("id") Long id) {
-        Optional<Animal> animal = service.getAnimalById(id);
-        if (!animal.isPresent()) {
-            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(animal.map(AnimalDTO::create));
+    public ResponseEntity<Object> get(@PathVariable("id") Long id) {
+        return service.getAnimalById(id)
+                .map(animal -> ResponseEntity.ok(AnimalDTO.create(animal)))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal não encontrado"));
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity buscarAnimaisPorNome(@RequestParam("nome") String nome) {
+    public ResponseEntity<List<AnimalDTO>> buscarAnimaisPorNome(@RequestParam("nome") String nome) {
         List<Animal> animais = service.buscarPorNome(nome);
         return ResponseEntity.ok(animais.stream().map(AnimalDTO::create).collect(Collectors.toList()));
     }
 
     @PostMapping()
-    @ApiOperation("Adiciona animal a base de dados")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Animal adicionado com sucesso"),
-            @ApiResponse(code = 400, message = "Erro ao salvar o animal")
-    })
-    public ResponseEntity post(@RequestBody AnimalDTO dto) {
+    @ApiOperation("Adiciona animal à base de dados")
+    public ResponseEntity<Object> post(@RequestBody AnimalDTO dto) {
         try {
             Animal animal = converter(dto);
-            animal = service.salvar(animal);
-            return new ResponseEntity(animal, HttpStatus.CREATED);
+            Animal animalSalvo = service.salvar(animal);
+            return new ResponseEntity<>(animalSalvo, HttpStatus.CREATED);
         } catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -83,14 +66,9 @@ public class AnimalController {
 
     @PutMapping("{id}")
     @ApiOperation("Altera detalhes de um animal")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Dados alterados com sucesso"),
-            @ApiResponse(code = 400, message = "Erro ao alterar dados do animal"),
-            @ApiResponse(code = 404, message = "Animal não encontrado")
-    })
-    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody AnimalDTO dto) {
-        if (!service.getAnimalById(id).isPresent()) {
-            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> atualizar(@PathVariable("id") Long id, @RequestBody AnimalDTO dto) {
+        if (service.getAnimalById(id).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal não encontrado");
         }
         try {
             Animal animal = converter(dto);
@@ -104,21 +82,13 @@ public class AnimalController {
 
     @DeleteMapping("{id}")
     @ApiOperation("Exclui um animal do banco de dados")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Animal excluido com sucesso"),
-            @ApiResponse(code = 404, message = "Animal não encontrado")
-    })
-    public ResponseEntity excluir(@PathVariable("id") Long id) {
-        Optional<Animal> animal = service.getAnimalById(id);
-        if (!animal.isPresent()) {
-            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
-        }
-        try {
-            service.excluir(animal.get());
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        } catch (RegraNegocioException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Object> excluir(@PathVariable("id") Long id) {
+        return service.getAnimalById(id)
+                .map(animal -> {
+                    service.excluir(animal);
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal não encontrado"));
     }
 
     public Animal converter(AnimalDTO dto) {
@@ -126,38 +96,19 @@ public class AnimalController {
         Animal animal = modelMapper.map(dto, Animal.class);
 
         if (dto.getIdTutor() != null) {
-            Optional<Tutor> tutor = tutorService.getTutorById(dto.getIdTutor());
-            if (!tutor.isPresent()) {
-                animal.setTutor(null);
-            } else {
-                animal.setTutor(tutor.get());
-            }
+            tutorService.getTutorById(dto.getIdTutor()).ifPresent(animal::setTutor);
         }
-
         if (dto.getIdRaca() != null) {
-            Optional<Raca> raca = racaService.getRacaById(dto.getIdRaca());
-            if (!raca.isPresent()) {
-                animal.setRaca(null);
-            } else {
-                animal.setRaca(raca.get());
-            }
+            racaService.getRacaById(dto.getIdRaca()).ifPresent(animal::setRaca);
         }
-
         return animal;
     }
 
     @GetMapping("/{id}/consultas")
     @ApiOperation("Obter detalhes de consultas de um animal")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Animal encontrado"),
-            @ApiResponse(code = 404, message = "Animal não encontrado")
-    })
-    public ResponseEntity getConsultas(@PathVariable("id") Long id) {
-        Optional<Animal> animal = service.getAnimalById(id);
-        if (!animal.isPresent()) {
-            return new ResponseEntity("Animal não encontrado", HttpStatus.NOT_FOUND);
-        }
-        List<Consulta> consultas = animal.get().getConsultas();
-        return ResponseEntity.ok(consultas.stream().map(ConsultaDTO::create).collect(Collectors.toList()));
+    public ResponseEntity<Object> getConsultas(@PathVariable("id") Long id) {
+        return service.getAnimalById(id)
+                .map(animal -> ResponseEntity.ok(animal.getConsultas().stream().map(ConsultaDTO::create).collect(Collectors.toList())))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Animal não encontrado"));
     }
 }
