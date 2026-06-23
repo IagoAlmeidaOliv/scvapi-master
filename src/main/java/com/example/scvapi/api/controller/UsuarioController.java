@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/usuarios")
 @RequiredArgsConstructor
 @Api("API de Usuários")
-@CrossOrigin
+@CrossOrigin("*")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
