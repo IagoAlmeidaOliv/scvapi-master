@@ -24,26 +24,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
+            FilterChain filterChain) throws ServletException, IOException {
 
-        String authorization = request.getHeader("Authorization");
+        String authorization = httpServletRequest.getHeader("Authorization");
 
-        if (authorization != null && authorization.startsWith("Bearer ")) {
+        if( authorization != null && authorization.startsWith("Bearer")){
             String token = authorization.split(" ")[1];
             boolean isValid = jwtService.tokenValido(token);
 
-            if (isValid) {
+            if(isValid){
                 String loginUsuario = jwtService.obterLoginUsuario(token);
                 UserDetails usuario = usuarioService.loadUserByUsername(loginUsuario);
-
-                UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-                user.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                UsernamePasswordAuthenticationToken user = new
+                        UsernamePasswordAuthenticationToken(usuario,null,
+                        usuario.getAuthorities());
+                user.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(user);
             }
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

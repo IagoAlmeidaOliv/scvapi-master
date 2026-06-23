@@ -16,8 +16,9 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String login;
     private String senha;
+    private String senhaRepeticao;
     private boolean admin; //true = adm, false = usuario qualquer
 }
